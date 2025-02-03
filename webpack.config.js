@@ -1,13 +1,8 @@
-// 현재 프로젝트에서 모듈 경로를 찾을 수 있도록 지정.
-// 특히 Windows에서 발생하는 오류 해결을 위한 코드.
-// 이 코드가 없어도 잘 동작하는 경우 필요치 않음.
-const _require = id => require(require.resolve(id, { paths: [require.main.path] }))
-
-// path: NodeJS에서 파일 및 디렉토리 경로 작업을 위한 전역 모듈
-const path = _require('path')
-const HtmlPlugin = _require('html-webpack-plugin')
-const CopyPlugin = _require('copy-webpack-plugin')
-const { VueLoaderPlugin } = _require('vue-loader')
+const path = require('path')
+const webpack = require('webpack')
+const HtmlPlugin = require('html-webpack-plugin')
+const CopyPlugin = require('copy-webpack-plugin')
+const { VueLoaderPlugin } = require('vue-loader')
 
 module.exports = {
   resolve: {
@@ -66,6 +61,11 @@ module.exports = {
 
   // 번들링 후 결과물의 처리 방식 등 다양한 플러그인들을 설정
   plugins: [
+    new webpack.DefinePlugin({
+      __VUE_OPTIONS_API__: 'true',
+      __VUE_PROD_DEVTOOLS__: 'false',
+      __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: 'false'
+    }),
     new HtmlPlugin({
       template: './index.html'
     }),
